@@ -53,10 +53,13 @@ let UserController = class UserController {
         }
         try {
             const user = await this.userService.getById(userId);
+            if (!user)
+                throw new common_1.HttpException('User not found.', common_1.HttpStatus.NOT_FOUND);
             return this.scoreService.updateUserScore(user, updateScoreDto.score);
         }
         catch (error) {
             console.error(error);
+            throw error;
         }
     }
 };
