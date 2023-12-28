@@ -1,0 +1,1 @@
+{"version":3,"file":"score.controller.js","sourceRoot":"","sources":["../../../src/APIEntities/score/score.controller.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,2CAAgE;AAChE,mDAA+C;AAIxC,IAAM,eAAe,GAArB,MAAM,eAAe;IAC1B,YAAoB,YAA0B;QAA1B,iBAAY,GAAZ,YAAY,CAAc;IAAG,CAAC;CAGnD,CAAA;AAJY,eAAe;IAD3B,IAAA,mBAAU,EAAC,QAAQ,CAAC;qCAEe,4BAAY;GADnC,eAAe,CAI3B;AAJY,0CAAe"}
