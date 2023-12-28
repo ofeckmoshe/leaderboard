@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Param, Patch, Post, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, HttpException, HttpStatus, Param, Patch, Post } from "@nestjs/common";
 import { ApiOkResponse, ApiTags, ApiBody, ApiCreatedResponse, ApiParam, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UserService } from "./user.service";
 import { CreateUserWithScoreDTO } from "./DTOs/CreateUserWithScoreDTO";
@@ -6,6 +6,7 @@ import { UpdateScoreDTO } from "./DTOs/UpdateScoreDTO";
 import { ScoreService } from "../score/score.service";
 import { User } from "src/database/entities/user.entity";
 import { CreateUserWithScoreReqDTO } from "./DTOs/CreateUserWithScoreReqDTO";
+import { UpdateScoreReqDTO } from "./DTOs/UpdateScoreReqDTO";
 
 @ApiTags('user')
 @Controller("user")
@@ -35,7 +36,7 @@ export class UserController {
   @Post()
   async addUser(@Body() createUserDto: CreateUserWithScoreDTO) {
     if (!createUserDto.name || !createUserDto.imageUrl) {
-      throw new BadRequestException('Name and imageUrl cannot be null.');
+      throw new HttpException('Name and imageUrl cannot be null.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
     try {
       const user = await this.userService.create(createUserDto);
@@ -45,9 +46,8 @@ export class UserController {
     }
   }
 
+  @ApiBody({ type: UpdateScoreReqDTO, required: true })
   @ApiParam({ name: 'userId', example: 1, type: Number, description: 'Unique ID of the user' })
-  @ApiParam({ name: 'score',  example: 20, type: Number, description: 'New score' })
-  @ApiBody({ type: UpdateScoreDTO })
   @ApiOperation({ summary: 'Update user score' })
   @ApiResponse({ status: 200, description: 'Successfully updted user score' })
   @ApiResponse({ status: 400, description: 'User Id and Score cannot be null' })
@@ -59,7 +59,7 @@ export class UserController {
     @Body() updateScoreDto: UpdateScoreDTO
   ) {
     if (!userId|| !updateScoreDto.score) {
-      throw new BadRequestException('UserId and score cannot be null.');
+      throw new HttpException('UserId and score cannot be null.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
     try {
       const user = await this.userService.getById(userId);

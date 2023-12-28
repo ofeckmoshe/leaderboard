@@ -21,6 +21,7 @@ const UpdateScoreDTO_1 = require("./DTOs/UpdateScoreDTO");
 const score_service_1 = require("../score/score.service");
 const user_entity_1 = require("../../database/entities/user.entity");
 const CreateUserWithScoreReqDTO_1 = require("./DTOs/CreateUserWithScoreReqDTO");
+const UpdateScoreReqDTO_1 = require("./DTOs/UpdateScoreReqDTO");
 let UserController = class UserController {
     constructor(userService, scoreService) {
         this.userService = userService;
@@ -36,7 +37,7 @@ let UserController = class UserController {
     }
     async addUser(createUserDto) {
         if (!createUserDto.name || !createUserDto.imageUrl) {
-            throw new common_1.BadRequestException('Name and imageUrl cannot be null.');
+            throw new common_1.HttpException('Name and imageUrl cannot be null.', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
         try {
             const user = await this.userService.create(createUserDto);
@@ -48,7 +49,7 @@ let UserController = class UserController {
     }
     async updateScore(userId, updateScoreDto) {
         if (!userId || !updateScoreDto.score) {
-            throw new common_1.BadRequestException('UserId and score cannot be null.');
+            throw new common_1.HttpException('UserId and score cannot be null.', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
         try {
             const user = await this.userService.getById(userId);
@@ -82,9 +83,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "addUser", null);
 __decorate([
+    (0, swagger_1.ApiBody)({ type: UpdateScoreReqDTO_1.UpdateScoreReqDTO, required: true }),
     (0, swagger_1.ApiParam)({ name: 'userId', example: 1, type: Number, description: 'Unique ID of the user' }),
-    (0, swagger_1.ApiParam)({ name: 'score', example: 20, type: Number, description: 'New score' }),
-    (0, swagger_1.ApiBody)({ type: UpdateScoreDTO_1.UpdateScoreDTO }),
     (0, swagger_1.ApiOperation)({ summary: 'Update user score' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Successfully updted user score' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'User Id and Score cannot be null' }),
