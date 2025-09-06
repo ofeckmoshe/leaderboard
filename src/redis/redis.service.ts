@@ -10,7 +10,12 @@ export class RedisService {
     score: number
   ): Promise<void> {
     const member = `${userId}:${userName}`;
-    await this.redisClient.zadd("leaderboard", score, member);
+    try {
+      await this.redisClient.zadd("leaderboard", score, member);
+    } catch (error) {
+      console.error(`Failed to add user score for ${member}:`, error);
+      throw new Error("Unable to add user score to the leaderboard.");
+    }
   }
 
   async getUserScoreAndRank(userId: number): Promise<[number, number]> {
